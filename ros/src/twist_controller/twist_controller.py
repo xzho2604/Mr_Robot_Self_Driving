@@ -68,4 +68,4 @@ class Controller(object):
             decel = max(vel_error,self.decle_limit)
             brake = abs(decel)*self.vehicle_mass*self.wheel_radius # Torque N8m
 
-        return throttle, brake, steer
+        return throttle, brake, steering

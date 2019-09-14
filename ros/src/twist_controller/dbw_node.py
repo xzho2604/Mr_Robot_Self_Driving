@@ -90,15 +90,15 @@ class DBWNode(object):
                                                                                     self.dbw_enabled,
                                                                                     self.linear_vel,
                                                                                     self.angular_vel)
-            # publish only when dbw is enabled
-            if self.dbw_enabled:
-                # print("[info] publish throttle, brake, steering:",self.throttle,self.brake,self.steering)
-                self.publish(self.throttle,self.brake,self.steering)
+                # publish only when dbw is enabled
+                if self.dbw_enabled:
+                    # print("[info] publish throttle, brake, steering:",self.throttle,self.brake,self.steering)
+                    self.publish(self.throttle,self.brake,self.steering)
 
             rate.sleep()
 
     def dbw_enabled_cb(self,msg):
-        self.db_enabled = msg
+        self.dbw_enabled = msg
 
     def twist_cb(self,msg):
         self.linear_vel = msg.twist.linear.x
