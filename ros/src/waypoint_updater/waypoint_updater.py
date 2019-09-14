@@ -102,6 +102,8 @@ class WaypointUpdater(object):
 
     def waypoints_cb(self, waypoints):
         # TODO: Implement
+        # base_waypoints will be called only once since the base way point
+        # would not change ,so it will be stroed in the class
         self.base_waypoints = waypoints
         if not self.waypoints_2d:
             # just to get the coordinates of the waypoints (x,y)
