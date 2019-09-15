@@ -10,7 +10,7 @@ from light_classification.tl_classifier import TLClassifier
 import tf
 import cv2
 import yaml
-from scipy.spacial import KDTree
+from scipy.spatial import KDTree
 
 STATE_COUNT_THRESHOLD = 3
 
@@ -20,6 +20,8 @@ class TLDetector(object):
 
         self.pose = None
         self.waypoints = None
+        self.waypoints_2d = None
+        self.waypoint_tree = None
         self.camera_image = None
         self.lights = []
 
@@ -56,7 +58,15 @@ class TLDetector(object):
         self.pose = msg
 
     def waypoints_cb(self, waypoints):
+        # TODO: Implement
+        # base_waypoints will be called only once since the base way point
+        # would not change ,so it will be stroed in the class
         self.waypoints = waypoints
+        if not self.waypoints_2d:
+            # just to get the coordinates of the waypoints (x,y)
+            self.waypoints_2d = [[waypoint.pose.pose.position.x, waypoint.pose.pose.position.y] \
+                                 for waypoint in waypoints.waypoints]
+            self.waypoint_tree = KDTree(self.waypoints_2d) # constructa KDTree using the 2d waypoints
 
     def traffic_cb(self, msg):
         self.lights = msg.lights
