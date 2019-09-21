@@ -3,6 +3,7 @@
 import rospy
 from geometry_msgs.msg import PoseStamped
 from styx_msgs.msg import Lane, Waypoint
+from std_msgs.msg import Int32 
 from scipy.spatial import KDTree
 import numpy as np
 
@@ -23,7 +24,9 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
+#LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
+LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. You can change this number
+MAX_DECEL = 0.5
 
 
 class WaypointUpdater(object):
@@ -36,23 +39,26 @@ class WaypointUpdater(object):
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
+        # get the traffic light info to adjust final published way points
+        # in case need to slow down and stop at the traffic light stop line
+        rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
 
-
-        self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
         # TODO: Add other member variables you need below
         self.pose = None
-        self.base_waypoints = None
+        self.base_lane = None
         self.waypoints_2d = None
         self.waypoint_tree = None
+        self.stopline_wp_idx = -1
 
-        # rospy.spin()
+        self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
+
         self.loop()
 
     def loop(self):
-        rate = rospy.Rate(50)
+        rate = rospy.Rate(30)
         while not rospy.is_shutdown():
-            if self.pose and self.base_waypoints:
+            if self.pose and self.base_lane:
                 # get the closest waypoints
                 closest_waypoint_idx = self.get_closest_waypoint_idx()
                 self.publish_waypoints(closest_waypoint_idx)
@@ -81,18 +87,68 @@ class WaypointUpdater(object):
 
         val = np.dot(cl_vect-prev_vect,pos_vect-cl_vect)
 
-        if val < 0: # the direction is opposite the closet point is behind the car
+        if val > 0: # the direction is opposite the closet point is behind the car
             # we need to use the next points insteand , modula len to wrap around
             closest_idx = (closest_idx + 1) % len(self.waypoints_2d)
         return closest_idx
 
     def publish_waypoints(self, closest_idx):
+        final_lane = self.generate_lane()
+        self.final_waypoints_pub.publish(final_lane)
+        """
         lane = Lane()
-        lane.header = self.base_waypoints.header # same format we do not need hearder anyway
+        lane.header = self.base_lane.header # same format we do not need hearder anyway
         # no need to worry about the greater than the base waypoint len since python slice will
         # just slice to the end if the lengths is greater 
-        lane.waypoints = self.base_waypoints.waypoints[closest_idx: closest_idx + LOOKAHEAD_WPS]
+        lane.waypoints = self.base_lane.waypoints[closest_idx: closest_idx + LOOKAHEAD_WPS]
         self.final_waypoints_pub.publish(lane)
+        """
+
+    def generate_lane(self):
+        lane = Lane()
+
+        closest_idx = self.get_closest_waypoint_idx()
+        farthest_idx = closest_idx + LOOKAHEAD_WPS
+        base_waypoints = self.base_lane.waypoints[closest_idx:farthest_idx]
+        
+        # if there is no traffic light or the traffic light is further away
+        # than th e furthest planing rout we just publish the base_waypoint ahead of the car
+        if self.stopline_wp_idx == -1 or (self.stopline_wp_idx >= farthest_idx):
+            lane.waypoints = base_waypoints 
+        # else there is a red traffic light in the planning route and need to deaccelarte
+        # to stop at the traffic light stop line
+        else:
+            lane.waypoints = self.decelerate_waypoints(base_waypoints,closest_idx)
+
+        return lane
+
+    def decelerate_waypoints(self,waypoints, closest_idx):
+        temp = []
+        for i , wp in enumerate(waypoints):
+            p = Waypoint()
+            p.pose = wp.pose
+            
+            # since the current waypoint of the car is based on the centre of the car
+            # we want to back 2 waypoints to let the front of the car to stop at the
+            # stop line instead of the centre of the car
+            stop_idx = max(self.stopline_wp_idx - closest_idx - 2,0)
+            # calculate distance of the current waypoint to the stoping point
+            dist = self.distance(waypoints,i,stop_idx) 
+            
+            # based on the distance to the stoping point we fit in a sqrt curve
+            # for smooth deacceleration  
+            # could use just a linear factor as well
+            vel = math.sqrt(2*MAX_DECEL * dist)
+            if vel < 1:
+                vel = 0.0
+            
+            # when the distance is large the sqrt computed velocity could be 
+            # large as well, so we need to cap it with the original velocity
+            p.twist.twist.linear.x = min(vel, wp.twist.twist.linear.x)
+            temp.append(p)
+
+        return temp
+
 
 
     def pose_cb(self, msg):
@@ -102,20 +158,18 @@ class WaypointUpdater(object):
 
     def waypoints_cb(self, waypoints):
         # TODO: Implement
-        self.base_waypoints = waypoints
+        # base_waypoints will be called only once since the base way point
+        # would not change ,so it will be stroed in the class
+        self.base_lane = waypoints
         if not self.waypoints_2d:
             # just to get the coordinates of the waypoints (x,y)
             self.waypoints_2d = [[waypoint.pose.pose.position.x, waypoint.pose.pose.position.y] \
                                  for waypoint in waypoints.waypoints]
             self.waypoint_tree = KDTree(self.waypoints_2d) # constructa KDTree using the 2d waypoints
 
-
-
-        pass
-
     def traffic_cb(self, msg):
         # TODO: Callback for /traffic_waypoint message. Implement
-        pass
+        self.stopline_wp_idx = msg.data
 
     def obstacle_cb(self, msg):
         # TODO: Callback for /obstacle_waypoint message. We will implement it later
