@@ -57,6 +57,7 @@ class TLClassifier(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
+        image = image.astype(np.float32)
         img_resize = preprocess_input(image)
         img_resize = np.expand_dims(img_resize, axis=0).astype('float32')
         print("shape and type of img_resize",img_resize.shape,type(img_resize))

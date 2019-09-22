@@ -24,6 +24,8 @@ class TLDetector(object):
         self.waypoint_tree = None
         self.camera_image = None
         self.lights = []
+        self.count = 0 # record freq enter detection
+
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -119,6 +121,8 @@ class TLDetector(object):
         closest_idx = self.waypoint_tree.query([x,y],1)[1]
         return closest_idx 
 
+
+
     def get_light_state(self, light):
         """Determines the current color of the traffic light
 
@@ -129,18 +133,19 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
-        return light.state # get the light state provided by the simulator
+        #return light.state # get the light state provided by the simulator
 
-        """
         if(not self.has_image):
             self.prev_light_loc = None
             return False
 
-        cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
+        # change from ros image message to cv rgb image
+        cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "rgb8") 
+        status = self.light_classifier.get_classification(cv_image) 
+        #rospy.loginfo("[traffic] ",tl_color," traffic light detected")
 
         #Get classification
-        return self.light_classifier.get_classification(cv_image)
-        """
+        return status 
 
     def process_traffic_lights(self):
         """Finds closest visible traffic light, if one exists, and determines its
@@ -172,17 +177,20 @@ class TLDetector(object):
 
 
                 if d >= 0 and d < diff: # check to see if stop line is ahead and visible infront of the car
-                    #rospy.loginfo("light: {}, car_wp_indx: {}, wp_indx: {}, d: {}".format(
+                    #rospy.loginfo("[debug] light: {}, car_wp_indx: {}, wp_indx: {}, d: {}".format(
                     #    i, car_wp_idx, temp_wp_idx, d))
                     diff = d
                     closest_light = light
                     line_wp_idx = temp_wp_idx
                     break
-
-        if closest_light:
+        # only detect and classify when 50 way poits ahead the traffic light
+        # with half the hz of this node for detection and classification
+        if closest_light and diff <60 and self.count%3 == 0: 
             state = self.get_light_state(closest_light)
             return line_wp_idx, state # return the stop line index is there is visible and the state of the light
-
+        
+        self.count += 1 #update count freq
+        self.count %= 30
         return -1, TrafficLight.UNKNOWN # return -1 if there is no visible traffice light
 
 if __name__ == '__main__':
