@@ -99,7 +99,7 @@ class TLClassifier(object):
 
             # find index of the traffic light class 10, if exits else return -1
             idx = classes.index(self.light_class_num) if self.light_class_num in classes else -1
-            print("[info ]idx:", idx, "socre:", scores[idx])
+            #print("[info ]idx:", idx, "socre:", scores[idx])
 
             # if traffic light not found return empty box
             # else found traffic light filter out weak detection 
@@ -132,8 +132,7 @@ class TLClassifier(object):
 
         """
         #rospy.loginfo("[debug] shape of the cropped image {} type: {}".format(image.shape,type(image)))
-        #image = np.asarray(image, dtype="int32")
-        img_copy = np.copy(image)
+        #img_copy = np.copy(image)
 
         b = self.object_box(image) # detect traffic light
         if b == []: # no traffic light detected
@@ -143,11 +142,11 @@ class TLClassifier(object):
         
         # if there is traffic light detected classify 
         #rospy.loginfo("[debug] box: {} {} {} {} ".format(b[0],b[2],b[1],b[3]))
-        img_copy = cv2.resize(img_copy[b[0]:b[2], b[1]:b[3]], (32, 32))
+        img_copy = cv2.resize(image[b[0]:b[2], b[1]:b[3]], (32, 32))
 
         image = img_copy.astype(np.float32)
         img_resize = preprocess_input(image)
-        img_resize = np.expand_dims(img_resize, axis=0).astype('float32')
+        img_resize = np.expand_dims(img_resize, axis=0)#.astype('float32')
 
         #rospy.loginfo("[debug] shape of the resized {} type: {}".format(img_resize.shape,type(img_resize)))
         

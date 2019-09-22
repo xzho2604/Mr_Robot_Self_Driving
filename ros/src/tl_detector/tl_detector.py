@@ -24,6 +24,7 @@ class TLDetector(object):
         self.waypoint_tree = None
         self.camera_image = None
         self.lights = []
+        self.count = 0 # record freq enter detection
 
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
@@ -182,11 +183,14 @@ class TLDetector(object):
                     closest_light = light
                     line_wp_idx = temp_wp_idx
                     break
-
-        if closest_light and diff <100:
+        # only detect and classify when 50 way poits ahead the traffic light
+        # with half the hz of this node for detection and classification
+        if closest_light and diff <80 and self.count%2: 
             state = self.get_light_state(closest_light)
             return line_wp_idx, state # return the stop line index is there is visible and the state of the light
-
+        
+        self.count += 1 #update count freq
+        self.count %= 30
         return -1, TrafficLight.UNKNOWN # return -1 if there is no visible traffice light
 
 if __name__ == '__main__':
