@@ -50,6 +50,7 @@ class TLClassifier(object):
 
         # object detection model for traffic light
         detect_model_name = 'ssd_mobilenet_v1_coco_11_06_2017'
+        #detect_model_name = 'ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03'
         PATH_TO_CKPT = detect_model_name + '/frozen_inference_graph.pb'
         self.detection_graph = tf.Graph()
 
