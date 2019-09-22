@@ -59,6 +59,7 @@ class TLClassifier(object):
         """
         img_resize = preprocess_input(image)
         img_resize = np.expand_dims(img_resize, axis=0).astype('float32')
+        print("shape and type of img_resize",img_resize.shape,type(img_resize))
 
         predict = self.cls_model.predict(img_resize)
         predict = np.squeeze(predict, axis =0)
@@ -126,7 +127,7 @@ if __name__ == '__main__':
 
             img = cv2.imread(image_path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # change to RBG channel
-            img_copy = np.copy(img) # for cropped iamge
+            #img_copy = np.copy(img) # for cropped iamge
             print("[info] Image shape",img.shape)
 
             start = time.time()
@@ -147,8 +148,13 @@ if __name__ == '__main__':
                plt.show()
 
                # show the cropped image of detected traffic light
-               img_copy = cv2.resize(img_copy[b[0]:b[2], b[1]:b[3]], (32, 32))
+               print("the init image is",img.shape)
+               img_copy = cv2.resize(img[b[0]:b[2], b[1]:b[3]], (32, 32))
+               start = time.time()
                tl_cls.get_classification(img_copy)
+               end = time.time()
+               print('[info] Classification time: {0:.10f}'.format(end-start))
+
                plt.figure(figsize=(5,5))
                plt.imshow(img_copy)
                plt.show()
