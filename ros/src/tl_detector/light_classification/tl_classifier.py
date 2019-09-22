@@ -137,7 +137,7 @@ class TLClassifier(object):
 
         b = self.object_box(image) # detect traffic light
         if b == []: # no traffic light detected
-            rospy.loginfo("[traffic] Unknown traffic light")
+            rospy.loginfo("[traffic] Unknown")
             return TrafficLight.UNKNOWN
 
         
@@ -156,7 +156,7 @@ class TLClassifier(object):
         predict = np.squeeze(predict, axis =0)
         # Get color classification
         tl_color = self.signal_classes_str[np.argmax(predict)]
-        rospy.loginfo("[traffic] light color is {}".format(tl_color))
+        rospy.loginfo("[traffic] {}".format(tl_color))
         #print("[info] ",tl_color,', Classification confidence:', predict[np.argmax(predict)])
 
         # TrafficLight message

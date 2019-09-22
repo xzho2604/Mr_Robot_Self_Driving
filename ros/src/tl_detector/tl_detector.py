@@ -176,14 +176,14 @@ class TLDetector(object):
 
 
                 if d >= 0 and d < diff: # check to see if stop line is ahead and visible infront of the car
-                    #rospy.loginfo("light: {}, car_wp_indx: {}, wp_indx: {}, d: {}".format(
+                    #rospy.loginfo("[debug] light: {}, car_wp_indx: {}, wp_indx: {}, d: {}".format(
                     #    i, car_wp_idx, temp_wp_idx, d))
                     diff = d
                     closest_light = light
                     line_wp_idx = temp_wp_idx
                     break
 
-        if closest_light:
+        if closest_light and diff <100:
             state = self.get_light_state(closest_light)
             return line_wp_idx, state # return the stop line index is there is visible and the state of the light
 
