@@ -93,6 +93,6 @@ model.fit_generator(generator=train_generator,
                    steps_per_epoch=step_size_train,
                    epochs=10)
 
-model.save("../my_model.h5")
+model.save("my_model.h5")
 
 
