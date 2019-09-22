@@ -185,7 +185,7 @@ class TLDetector(object):
                     break
         # only detect and classify when 50 way poits ahead the traffic light
         # with half the hz of this node for detection and classification
-        if closest_light and diff <80 and self.count%2: 
+        if closest_light and diff <60 and self.count%3 == 0: 
             state = self.get_light_state(closest_light)
             return line_wp_idx, state # return the stop line index is there is visible and the state of the light
         
