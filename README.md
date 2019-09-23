@@ -53,40 +53,26 @@ Note: If you download the tar.gz file of quantized models and un-tar, you will g
 
 ![CNN Model](model.png)</br>
 
-First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
 
 Layer (type) | Output Shape | Param # 
 ------------ | -------------- | -------------- 
 |conv2d_1 (Conv2D) | (None, 32, 32, 8) | 224 |      
 |activation_1 (Activation)|   (None, 32, 32, 8)  |       0      |   
 |conv2d_2 (Conv2D)        |    (None, 30, 30, 16) |       1168    |  
-_________________________________________________________________
-activation_2 (Activation)    (None, 30, 30, 16)        0         
-_________________________________________________________________
-max_pooling2d_1 (MaxPooling2 (None, 15, 15, 16)        0         
-_________________________________________________________________
-conv2d_3 (Conv2D)            (None, 13, 13, 32)        4640      
-_________________________________________________________________
-activation_3 (Activation)    (None, 13, 13, 32)        0         
-_________________________________________________________________
-max_pooling2d_2 (MaxPooling2 (None, 6, 6, 32)          0         
-_________________________________________________________________
-flatten_1 (Flatten)          (None, 1152)              0         
-_________________________________________________________________
-dense_1 (Dense)              (None, 64)                73792     
-_________________________________________________________________
-activation_4 (Activation)    (None, 64)                0         
-_________________________________________________________________
-dense_2 (Dense)              (None, 3)                 195       
-_________________________________________________________________
-activation_5 (Activation)    (None, 3)                 0         
-=================================================================
-Total params: 80,019
-Trainable params: 80,019
-Non-trainable params: 0
+activation_2 (Activation)  |  (None, 30, 30, 16)    |    0         |
+max_pooling2d_1 (MaxPooling2| (None, 15, 15, 16) |       0    |    
+conv2d_3 (Conv2D)     |       (None, 13, 13, 32)   |     4640   |   
+activation_3 (Activation)  |  (None, 13, 13, 32)  |      0      |   
+max_pooling2d_2 (MaxPooling2 |(None, 6, 6, 32)   |       0      |   
+flatten_1 (Flatten)    |      (None, 1152)   |           0    |     
+dense_1 (Dense)         |     (None, 64)     |           73792  |   
+activation_4 (Activation)   | (None, 64)       |         0      |   
+dense_2 (Dense)           |   (None, 3)      |           195    |   
+activation_5 (Activation)  |  (None, 3)       |          0      |   
+</br>
+Total params: 80,019</br>
+Trainable params: 80,019</br>
+Non-trainable params: 0</br>
 
 
 
