@@ -46,6 +46,7 @@ def build_model():
     model.add(Activation('softmax'))
 
     model.summary()
+    plot_model(model, to_file='model.png')
 
     return model
 
