@@ -3,6 +3,7 @@
 * Xiang Zhou(Team Leader): erikxiangzhou@gmail.com 
 * Anyu Guo: anyuguo94@gmail.com 
 * Zhuoyun Zhong: 905954450@qq.com
+* C
 
 
 
