@@ -48,6 +48,42 @@ Note: The asterisk (☆) at the end of model name indicates that this model supp
 
 Note: If you download the tar.gz file of quantized models and un-tar, you will get different set of files - a checkpoint, a config file and tflite frozen graphs (txt/binary).
 
+### Traffic Light Classification
+
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_1 (Conv2D)            (None, 32, 32, 8)         224       
+_________________________________________________________________
+activation_1 (Activation)    (None, 32, 32, 8)         0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 30, 30, 16)        1168      
+_________________________________________________________________
+activation_2 (Activation)    (None, 30, 30, 16)        0         
+_________________________________________________________________
+max_pooling2d_1 (MaxPooling2 (None, 15, 15, 16)        0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 13, 13, 32)        4640      
+_________________________________________________________________
+activation_3 (Activation)    (None, 13, 13, 32)        0         
+_________________________________________________________________
+max_pooling2d_2 (MaxPooling2 (None, 6, 6, 32)          0         
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 1152)              0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 64)                73792     
+_________________________________________________________________
+activation_4 (Activation)    (None, 64)                0         
+_________________________________________________________________
+dense_2 (Dense)              (None, 3)                 195       
+_________________________________________________________________
+activation_5 (Activation)    (None, 3)                 0         
+=================================================================
+Total params: 80,019
+Trainable params: 80,019
+Non-trainable params: 0
+
+
 
 ---
 
