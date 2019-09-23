@@ -1,6 +1,16 @@
 ### Team Members
 
-* Xiang Zhou: erikxiangzhou@gmail.com 
+* Xiang Zhou(Team Leader): erikxiangzhou@gmail.com 
+
+
+
+
+### Self Driving Car Ros Architecture:
+<alter !text>(arche.png)
+
+
+
+### Traffic Light Detection
 
 
 
