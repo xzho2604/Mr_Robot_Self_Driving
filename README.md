@@ -51,8 +51,9 @@ Note: If you download the tar.gz file of quantized models and un-tar, you will g
 ### Traffic Light Classification
 
 
+![CNN Model](model.png)
 |Layer (type) | Output Shape | Param # |  
-| ------------ | :--------------: | :--------------: | :-------------: |
+| ------------ | -------------- | -------------- | ------------- |
 |conv2d_1 (Conv2D) | (None, 32, 32, 8) | 224 |      
 _________________________________________________________________
 activation_1 (Activation)    (None, 32, 32, 8)         0         
