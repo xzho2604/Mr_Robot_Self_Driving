@@ -50,9 +50,7 @@ Note: If you download the tar.gz file of quantized models and un-tar, you will g
 
 ### Traffic Light Classification
 
-
-![CNN Model](model.png)</br>
-
+For the traffic light classification we have trained a light weight CNN structured as follow using about 1400 images of traffic lights, sine total parametre is 80,019 it is very light weight and fast in run time. The accuracy of this model is 99.994% which is very reliable for traffic light detection.
 
 Layer (type) | Output Shape | Param # 
 ------------ | -------------- | -------------- 
@@ -69,10 +67,13 @@ dense_1 (Dense)         |     (None, 64)     |           73792  |
 activation_4 (Activation)   | (None, 64)       |         0      |   
 dense_2 (Dense)           |   (None, 3)      |           195    |   
 activation_5 (Activation)  |  (None, 3)       |          0      |   
-</br>
 Total params: 80,019</br>
 Trainable params: 80,019</br>
 Non-trainable params: 0</br>
+
+
+
+
 
 
 
