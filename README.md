@@ -4,7 +4,7 @@
 * Anyu Guo: anyuguo94@gmail.com 
 * Zhuoyun Zhong: 905954450@qq.com
 * Cheng-Han Wu: two30022001@hotmail.com
-
+* Yixin Zhang: 1277153330@qq.com
 
 
 
