@@ -6,7 +6,7 @@
 
 
 ### Self Driving Car Ros Architecture:
-<alter !text>(arche.png)
+![Ros Architecture](arche.png)
 
 
 
