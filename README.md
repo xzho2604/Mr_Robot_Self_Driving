@@ -53,9 +53,13 @@ Note: If you download the tar.gz file of quantized models and un-tar, you will g
 
 ![CNN Model](model.png)</br>
 
+First Header | Second Header
+------------ | -------------
+Content from cell 1 | Content from cell 2
+Content in the first column | Content in the second column
 
 Layer (type) | Output Shape | Param # 
------------- | -------------- | -------------- | ------------- 
+------------ | -------------- | -------------- 
 |conv2d_1 (Conv2D) | (None, 32, 32, 8) | 224 |      
 |activation_1 (Activation)|   (None, 32, 32, 8)  |       0      |   
 |conv2d_2 (Conv2D)        |    (None, 30, 30, 16) |       1168    |  
