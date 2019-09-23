@@ -1,6 +1,7 @@
 ### Team Members
 
 * Xiang Zhou(Team Leader): erikxiangzhou@gmail.com 
+* Anyu Guo: anyuguo94@gmail.com 
 
 
 
