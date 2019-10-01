@@ -1,3 +1,8 @@
+### Ros Bag Play on Real Self Driving Car
+![ros_bag](rosbag-play.gif) 
+
+
+
 ### Team Members
 
 * Xiang Zhou(Team Leader): erikxiangzhou@gmail.com 
